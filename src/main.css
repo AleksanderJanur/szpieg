@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+@media only screen and (min-width: 1600px){
+  .ui.container {
+      width: 1480px !important;
+      margin-left: auto!important;
+      margin-right: auto!important;
+  }
+}
+*{
+  font-family: 'Noto Sans', sans-serif;
+
+}
+@media only screen and (max-width: 800px) {
+  .column{
+    margin-left:15px;
+    margin-right:15px;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .gridFixPlaces{
+    display:none !important;
+  }
+
+}
+@media only screen and (max-width: 760px) {
+.seeMoreText{
+  display:none !important;
+}
+
+}
+
+@media only screen and (max-width: 760px) {
+.imageBackgroundText{
+  display:inline !important;
+      background-image: none !important;
+}
+.firstElem{
+  margin-left: 0px !important;
+}
+}
+.margintop20{
+  margin-top:20px !important;
+}

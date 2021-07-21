@@ -1,0 +1,145 @@
+.Cities{
+  background-color:#0c101c;
+  padding-bottom: 30px;
+}
+.cities{
+    padding-top:10px;
+    background-color:#0c101c;
+    padding-bottom:30px;
+}
+.events{
+  padding-top:30px !important;
+  padding-bottom: 30px;
+}
+.imageBackgroundText{
+  background-image:url('../img/itemsBackground.png');
+      background-repeat: no-repeat;
+      display: inline-flex;
+
+      color: white !important;
+      margin-top: 50px;
+      zoom: 0.5;
+      height: 100px;
+      font-size: 32px;
+      width: 100%;
+}
+hr{
+  width:100%;
+border: 1px solid #1e222d;
+}
+.card{
+  margin-top:20px !important;
+}
+.eventsGrid{
+  padding-top:0px !important;
+  margin-top:0px !important;
+}
+.cityText{
+  margin-top:24px;
+  margin-left:18px;
+  text-transform: uppercase;
+}
+.ui.default.dropdown:not(.button)>.text, .ui.dropdown:not(.button)>.default.text {
+    color: black;
+    font-weight: bold;
+}
+.ui.selection.dropdown .menu>.item {
+  font-size:32px;
+}
+.ui.selection.dropdown .menu {
+  max-height: 500px !important;
+}
+.singleElem{
+  margin-left:10px !important;
+}
+span:nth-child(even){
+  font-weight: bold;
+}
+@media only screen and (min-width: 1000px) {
+  .desktopNewEvents {
+    display:flex;
+  }
+  .mobileNewEvents{
+    display:none;
+  }
+}
+@media only screen and (max-width: 1000px) {
+  .desktopNewEvents {
+    display:none;
+  }
+  .mobileNewEvents{
+    display:flex;
+    width: 100%;
+  }
+  .imageBackgroundText{
+    margin-bottom:20px;
+  }
+  .hideMe1000{
+    background-image:none;
+    width:100% !important;
+  }
+  .newEventsSelect{
+    width:100%;
+  }
+}
+.ui.card{
+  border:none;
+      background: #1e222d !important;
+  box-shadow: none;
+}
+.ui.card>.image:not(.ui)>img, .ui.cards>.card>.image:not(.ui)>img {
+  max-width:290px;
+  height:179px;
+  object-fit: cover;
+}
+.ui.card>.content, .ui.cards>.card>.content {
+  height: 70px;
+  background-color: #1e222d;
+
+border: none;
+}
+.ui.card>:last-child, .ui.cards>.card>:last-child{
+    border-radius:none !important;
+}
+.ui.card>.content>.header:not(.ui), .ui.cards>.card>.content>.header:not(.ui) {
+  margin-top:1px !important;
+  color:white;
+}
+.ui.card .meta :last-child, .ui.cards>.card .meta :last-child {
+    color:white;
+}
+.ui.card:hover{
+      -webkit-filter: grayscale(100%);
+      transition: 0.7s;
+}
+
+@media only screen and (max-width: 1000px) {
+  .newEventsCards{
+    margin:0 auto !important;
+    width: 100% !important;
+  }
+  .newEventsCards.ui.card>.image:not(.ui)>img, .ui.cards>.card>.image:not(.ui)>img {
+    max-width:100% !important;
+    height:230px !important;
+    object-fit: cover;
+  }
+}
+@media only screen and (max-width: 991px) and (min-width: 768px) {
+  .rowNewEvents div:last-child .card{
+    display:none;
+  }
+}
+.newEventsGrid{
+      display: inline !important;
+      margin-top:0px !important;
+      padding-top:0px !important;
+}
+.newEventsColumnRight{
+  float:right !important;
+  width: auto !important;
+}
+.newEventsGrid > .column{
+  padding-bottom:0px !important;
+  margin-top:0px !important;
+  padding-top:0px !important;
+}

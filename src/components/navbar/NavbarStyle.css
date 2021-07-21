@@ -1,0 +1,54 @@
+.navbar {
+  background-color:#0b0510;
+  max-height: 100px;
+  position: relative;
+  z-index: 10;
+
+}
+.navbarGrid{
+  padding-left: 0px !important;
+}
+.logo{
+  max-width:138px !important;
+  padding-top:10px !important;
+}
+.rightSide{
+  text-align: right;
+  margin-top:35px;
+}
+.singleElem{
+  cursor:pointer;
+}
+.newEventsColumnRight{
+  text-align:right;
+}
+svg{
+  font-size:24px !important;
+  color:white;
+  background-color: none !important;
+  font-size: 48px !important;
+    margin-left: 30px;
+    margin-top: 20px !important;
+}
+svg:hover{
+  color:red !important;
+  cursor:pointer;
+}
+.imageBackground{
+  background-image:url('../img/itemFullBackground.png');
+  background-repeat: no-repeat;
+display: inline-flex;
+margin-left:20px;
+cursor:pointer;
+
+    margin-top: -30px;
+    width: 89px;
+    zoom: 0.45;
+    height: 100px;
+}
+.ig{
+  margin-left:24px !important;
+}
+.in{
+  margin-left:24px !important;
+}

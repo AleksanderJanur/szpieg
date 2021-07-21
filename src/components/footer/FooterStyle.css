@@ -1,0 +1,28 @@
+.footerLinks{
+    display: flex;
+    width: max-content;
+    text-transform: uppercase;
+    color:black;
+}
+.footerLinks:hover{
+  color:red;
+}
+.footerRow{
+  box-shadow:none !important;
+}
+.footerCities>div{
+  background-color: white !important;
+}
+
+.footerCities .cityText{
+    color:black !important
+}
+.footerCities .imageBackgroundText{
+  background-image:none;
+  font-size: 28px;
+    line-height: 1.6em;
+
+}
+.imageBackgroundText{
+    width:max-content !important;
+}

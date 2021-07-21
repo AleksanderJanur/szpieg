@@ -1,0 +1,97 @@
+.ConcertHeader{
+  color:white !important;
+  text-transform: uppercase !important;
+}
+.ConcertLinks{
+  color:white;
+}
+.ConcertLinks:hover{
+  color:red;
+}
+.sidebar{
+  background: white;
+
+}
+.concert{
+  background: white;
+  height: -webkit-fill-available;
+  padding-bottom:25px !important;
+
+}
+.concertHeaderColumn{
+  padding-left:0px !important;
+  max-width: -webkit-fill-available !important;
+}
+.contentComingEvents{
+  font-weight: bold!important;
+  text-transform: uppercase !important;
+}
+.popup {
+  color:black !important;
+  background-color:white !important;
+  padding:20px;
+}
+.searchSidebar{
+
+}
+.light{
+  border:1px solid #eee;
+}
+.searchHeader{
+  text-transform: uppercase !important;
+  word-break: break-all;
+  margin-top:5px !important;
+}
+.entry-content{
+  word-break: break-word;
+}
+.searchResults > .results{
+  background-color:transparent !important;
+  border:none !important;
+  box-shadow: none !important;
+}
+.ui.input{
+  max-width: 100% !important;
+}
+.sidebarImages >img{
+  width:100%;
+  margin-bottom:10px;
+}
+.step{
+  flex:auto !important;
+}
+.steps{
+  width:100%;
+  margin-bottom: 0px !important;
+  margin-top:15px !important;
+}
+.ticketsBuy{
+  background-color:black;
+  color:#eee;
+  float:right;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-left:5px;
+  padding:5px;
+
+}
+.lastEvents{
+  margin-top:30px;
+}
+.lastEventsHeader{
+  margin-bottom:30px !important;
+}
+.ticketsDiv{
+  display: inline-block;
+}
+.tags{
+  margin-right:10px;
+}
+.contentConcert{
+  margin-top:20px;
+}
+@media only screen and (max-width: 991px) {
+.sidebar{
+  display:none !important;
+}
+}

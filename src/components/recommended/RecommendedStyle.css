@@ -1,0 +1,43 @@
+.Recommended{
+  background-color:#ef4039;
+  margin:0 auto;
+    padding-bottom: 50px;
+    padding-top: 10px;
+}
+.RecommendedCards{
+  margin-right:10px !important;
+  width:340px !important;
+
+  margin-left: 10px !important;
+}
+.recommendedImage{
+  max-width: 340px !important;
+  height: 240px !important;
+}
+.recommendedImage > img{
+  max-width: 340px !important;
+  height: 240px !important;
+}
+.marginleft30{
+  margin-left:30px;
+}
+.RecommendedCards .content{
+  height:50px !important;
+}
+.marginright15{
+  margin-right:15px;
+}
+.recommendedText{
+  color: #fff;
+text-transform: uppercase;
+font-weight: 700;
+
+}
+.linksHref{
+  color:white;
+  display:flex;
+  text-decoration: none;
+}
+.linksHref:hover{
+  color:red;
+}

@@ -1,0 +1,52 @@
+.headerComing{
+  background-color:#0c101c;
+  color:white !important;
+  padding-top:20px !important;
+  padding-bottom:20px !important;
+}
+
+.border{
+  border:1px solid white;
+  width:100px;
+  margin:5px;
+      display: inline-flex;
+}
+@media only screen and (max-width: 500px) {
+.border{
+  display:none !important;
+}
+}
+.gridFixPlaces{
+  width:100% !important;
+}
+.placesContent{
+  padding:20px !important;
+}
+.placesCard{
+  width:100% !important;
+  min-height: 125px;
+}
+.ui.card>.content{
+  height: -webkit-fill-available !important;
+}
+.placesGrid{
+  margin-top: -67px !important;
+}
+.center{
+      background: transparent !important;
+}
+.center > a{
+  color:#eee !important;
+}
+.center > a:hover{
+  color:red !important;
+}
+.blue{
+  color:red !important;
+  text-decoration: underline;
+}
+.tagImage > img{
+  min-height: 250px !important;
+  width:100% !important;
+  min-width:100% !important;
+}
