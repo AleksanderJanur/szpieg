@@ -3,6 +3,7 @@ require('../models/Promotion');
 require('../models/Location');
 require('../models/Promoter');
 require("dotenv").config();
+console.log("Dupa")
 const fs = require("fs")
 const upload = require("../routes/upload");
 const Grid = require("gridfs-stream");
@@ -11,7 +12,7 @@ const bodyParser = require('body-parser')
 const path = require('path');
 const app = express()
 const mongoose = require('mongoose');
-const port = 5000
+const port = process.env.PORT || 5000
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 const cors = require('cors')
