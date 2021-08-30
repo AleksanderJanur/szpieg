@@ -11,7 +11,6 @@ import {
 
 
 const Navbar = () => {
-  //let { dupa } = useParams();
   return (
     <div className="navbar">
     <Container>

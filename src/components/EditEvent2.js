@@ -51,7 +51,7 @@ const EditEvent2 = (props)=>{
     }
     const notify = () => {
         alert("Edytowano Event");
-        history.push('');
+        history.push('panelAdmin');
     }
     const deleteMessage = ()=>{
         alert("Usunięto lokalizacje");

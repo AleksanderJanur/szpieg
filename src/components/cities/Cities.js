@@ -32,7 +32,7 @@ const countryOptions = [
 ]
 
 const Cities = (props) => {
-  const [city] = useState(["Kraków", "Warszawa", "Poznań", "Gdańsk", "Gdynia"]);
+  const [city] = useState(["Kraków", "Warszawa", "Poznań", "Gdańsk","Szczecin", "Gdynia"]);
   return(
     <div className="cities">
     <Container>

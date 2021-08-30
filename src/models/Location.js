@@ -7,6 +7,10 @@ const locationSchema = new mongoose.Schema({
     picture:String,
     SEOType:String,
     longitude:String,
-    latitude:String
+    latitude:String,
+    locationRegex:{
+        type:String,
+        unique: true
+    }
 });
 mongoose.model('Location', locationSchema);

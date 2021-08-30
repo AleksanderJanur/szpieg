@@ -1,75 +1,64 @@
-import React, { useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import 'semantic-ui-css/semantic.min.css'
 import { Container, Grid, Image, Header, Step } from 'semantic-ui-react'
 import './ConcertStyle.css'
 import {Link, useParams} from "react-router-dom";
 import concertImage from '../img/koncert1.jpg'
+import {Context as EventContext} from "../../context/EventContext";
 
 
 
 const Cities = (props) => {
+  const {state, fetchEventsByTitle} = useContext(EventContext);
+  console.log(props.header)
+  const { name } = useParams();
+  useEffect(() => {
+    fetchEventsByTitle(name)
+  },[name]);
   let Tags = ["Tag1", "Tag2", "Tag3", "Tag4"]
-  let Tickets = [
-    {
-      date: "24/07/2022, 19:00",
-      city: "Kraków",
-      place: "Amfiteatr w Kołobrzegu – Kołobrzeg",
-      price: "Bilety od 35PLN"
-    },
-    {
-      date: "24/07/2022, 19:00",
-      city: "Kraków",
-      place: "Amfiteatr w Kołobrzegu – Kołobrzeg",
-      price: "Bilety od 35PLN"
-    },
-    {
-      date: "24/07/2022, 19:00",
-      city: "Kraków",
-      place: "Amfiteatr w Kołobrzegu – Kołobrzeg",
-      price: "Bilety od 35PLN"
-    },
-  ]
-  let { name } = useParams();
-  console.log(props);
+  console.log(props)
   return(
     <div className="">
-    {props.image ? <Image fluid src={props.image} /> : <Image fluid src={concertImage} />}
+    {state===undefined ? null : <Image fluid src={state[0].picture} /> }
     {props.content ?
       <div className="content" dangerouslySetInnerHTML={{__html: props.content}}></div>
         :
       <div className="contentConcert">
       <Header className="" as='h1'>
-          Bonnie Tyler | Koncert
+        {state[0].title}
       </Header>
       <Header className="" as='h3'>
           Bonnie Tyler powraca w wielkim stylu do Polski! Gwiazda muzyki pop lat 70. i 80. zagra koncert w Amfiteatrze w Opolu
+        Trzeba dodac ten desciption
       </Header>
       <hr/>
       <Header className="" as='h4'>
           Bonnie Tyler znana jest z takich hitów, jak „Holding out for a Hero”, „If You Were a Woman (And I Was a Man)” czy „Total Eclipse of the Heart”. Artystce urodzonej w Walii światową popularność przyniósł utwór „It’s a Heartache” z 1978 r.
+          A tu to juz nie wiem co trza.
       </Header>
 
       <Header className="contentComingEvents" as='h3'>
           Nachodzące wydarzenia:
       </Header>
       {
-        Tickets.map((item,key)=>(
+        state.map((item,i)=>(
           <div className="ticketsDiv">
           <Step.Group >
             <Step>
-              <Step.Title>{item.date}</Step.Title>
+              <Step.Title>{new Date(item.data).toISOString().split('T')[0]}</Step.Title>
             </Step>
             <Step>
-              <Step.Title>{item.city}</Step.Title>
-              <Step.Description>{item.place}</Step.Description>
+              <Step.Title>{item.location.city}</Step.Title>
+              <Step.Description>{item.location.name}</Step.Description>
             </Step>
             <Step>
               <Step.Title>{item.price}</Step.Title>
             </Step>
           </Step.Group>
-            <Link to="/"><span className="ticketsBuy">KUP BILET bilety24</span></Link>
-            <Link to="/"><span className="ticketsBuy">KUP BILET eventim</span></Link>
-            <Link to="/"><span className="ticketsBuy">KUP BILET biletin</span></Link>
+            {
+              item.urls.map((value,key)=>(
+                  <Link to={value.url}><span className="ticketsBuy">KUP BILET {value.name}</span></Link>
+              ))}
         </div>
       ))
       }
@@ -97,7 +86,7 @@ const Cities = (props) => {
 
 
 
-
+      <div onClick={()=>console.log(state)}>dupa</div>
     </div>
   )
 }

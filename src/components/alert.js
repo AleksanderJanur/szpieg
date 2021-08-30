@@ -16,7 +16,6 @@ const Alert = () =>{
                           promoterName,promoterLink,promoterPicture, picture, promotion, color, category, tags) =>{
         addToTicketArr();
         await trackerApi.post('/events', {
-            "evenID":"Dodane ręcznie",
             "link": link,
             "title": title,
             "subtitle": subtitle,
@@ -45,7 +44,7 @@ const Alert = () =>{
     }
     const notify = () => {
         alert("Dodano Event");
-        history.push('');
+        history.push('panelAdmin');
     }
 
     const sendTestPicture = async()=>{
@@ -53,6 +52,7 @@ const Alert = () =>{
         arr.push(picture);
         arr.push(promoterPicture);
         arr.push(locationPicture)
+        console.log("dupa")
         for(let i=0;i<arr.length;i++) {
             if(arr[i]==='')
                 continue
@@ -622,7 +622,7 @@ const Alert = () =>{
                 onChange={e=>setTags(e.target.value)}
                 value={tags}
             />
-
+            <div onClick={()=>sendTestPicture()}>dupa</div>
             <Button type='submit' onClick={()=>{sendTestPicture();funkcja(link,title,subtitle,startDate, hour, price, kupBilecik,BILETINPL,BILETY24PL,EVENTIMPL,BILETOMATPL,EWEJSCIOWKIPL,TICKETMASTER,
                 status, locationName,locationStreet,locationPostalCode,locationCity,locationPicture,locationSEOType,locationLongitude,locationLatitude,
                 promoterName,promoterLink,promoterPicture, picture, promotion, color, category, tags)}}>Wyślij</Button>

@@ -14,11 +14,15 @@ const fetchEvents = dispatch => async () => {
     const response = await trackerApi.get('/events');
     dispatch({ type: 'fetch_events', payload: response.data });
 };
+const fetchEventsByTitle = dispatch => async (title) => {
+    const response = await trackerApi.get('/events/'+title);
+    dispatch({ type: 'fetch_events', payload: response.data });
+};
 const updateForm = dispatch => async ()=>{
 
 }
 export const { Provider, Context } = createDataContext(
     eventReducer,
-    { fetchEvents },
+    { fetchEvents, fetchEventsByTitle},
     []
 );

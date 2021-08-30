@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const eventsSchema = new mongoose.Schema({
-    eventID:String,
     link:String,
     title:String,
     subtitle:String,
@@ -22,6 +21,12 @@ const eventsSchema = new mongoose.Schema({
     color:String,
     category:String,
     tags:Array,
-    description:String //to dac jako array
+    description:String,
+    addedDate:Date,
+    locationRegex:String,
+    artist:String,
+    type:String,
+
+
 });
 mongoose.model('Event', eventsSchema);

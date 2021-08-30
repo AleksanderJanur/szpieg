@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const promoterSchema = new mongoose.Schema({
-    name: String,
+    name:{
+        type:String,
+        unique: true
+},
     link: String,
     picture:String
 });

@@ -42,7 +42,7 @@ const EditLocation2 = (props) =>{
     }
     const notify = () => {
         alert("Edytowano Lokalizacje");
-        history.push('');
+        history.push('panelAdmin');
     }
     const deleteMessage = ()=>{
         alert("Usunięto lokalizacje");

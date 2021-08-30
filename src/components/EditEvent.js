@@ -1,7 +1,7 @@
 import React, { useState,useEffect, useContext} from 'react';
 import trackerApi from '../api/tracker';
 import { Input, Label, Menu,Dropdown } from 'semantic-ui-react'
-import {Context as BlogContext} from '../context/EventContext';
+import {Context as EventContext} from '../context/EventContext';
 import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router-dom';
 
@@ -11,7 +11,7 @@ const EditEvent = ()=>{
     const handleClick = (event) => history.push('/editEventSend',{event});
     const [event, setEvent] = useState(null)
     const [sortBy, setSortBy] = useState('')
-    const {state, fetchEvents} = useContext(BlogContext);
+    const {state, fetchEvents} = useContext(EventContext);
     const [searchQuery, setSearchQuery] = React.useState('');
     useEffect(() => {
         fetchEvents();

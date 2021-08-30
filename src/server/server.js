@@ -2,19 +2,20 @@ require('../models/Event');
 require('../models/Promotion');
 require('../models/Location');
 require('../models/Promoter');
+require('../models/Title');
 require("dotenv").config();
-console.log("Dupa")
 const fs = require("fs")
 const upload = require("../routes/upload");
 const Grid = require("gridfs-stream");
 const express = require('express')
 const bodyParser = require('body-parser')
+
 const path = require('path');
 const app = express()
 const mongoose = require('mongoose');
 const port = process.env.PORT || 5000
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 const cors = require('cors')
 
 app.use(cors()) // Use this after the variable declaration
@@ -40,6 +41,7 @@ const Event = mongoose.model('Event');
 const Location = mongoose.model('Location');
 const Promotion = mongoose.model('Promotion');
 const Promoter = mongoose.model('Promoter');
+const Title = mongoose.model('Title');
 const router = express.Router();
 let gfs;
 let conn = mongoose.createConnection(mongoUri);
@@ -76,33 +78,109 @@ app.delete("/file/:filename", async (req, res) => {
 });
 
 router.post('/events',async(req,res)=>{
-    const {link,title,subtitle,data, hour, price,urls,
+    const {added,link,title,subtitle,data, hour, price,urls,
         status, locationName,locationStreet,locationPostalCode,locationCity,
         locationPicture,locationSEOType,locationLongitude,locationLatitude,
-        promoterName,promoterLink,promoterPicture, picture, promotion, color, category, tags} = req.body;
+        promoterName,promoterLink,promoterPicture, picture, color, category, tags,locationRegex,type,artist} = req.body;
+/*    const streetRegex1 = locationStreet.replace("ul.","").replace("ul","").replace("al.","").replace("al","").replace(/[0-9]/g, '').replace(" ","")
+        .toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "")*/
+    const events = await Event.find({locationRegex:locationRegex,data:data})
+    if(events.length===0){
     try{
-        const locPic = 'img-'+locationPicture;
+/*        const locationRegex = locationStreet.replace("ul.","").replace("ul","").replace("al.","").replace("al","").replace(/[0-9]/g, '').replace(" ","")
+            .toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "")*/
         const location = new Location({name:locationName,street:locationStreet,postalCode:locationPostalCode,
-            city:locationCity,picture:locPic,SEOType:locationSEOType,longitude:locationLongitude,latitude:locationLatitude})
-        const promPic = 'img-'+promoterPicture;
-        const promoter = new Promoter({name:promoterName,link:promoterLink,picture:promPic});
-        const pic = 'img-'+picture;
-        const eventSchema = new Event({link,title,subtitle,data,hour,price,urls,status,location,promoter,picture:pic,color,category,tags});
+            city:locationCity,picture:added==='byXml'?locationPicture:'file/img-'+locationPicture,
+            SEOType:locationSEOType,longitude:locationLongitude,latitude:locationLatitude,locationRegex:locationRegex})
+/*        const promoter = new Promoter({name:promoterName,link:promoterLink,picture:added==='byXml'?promoterPicture:'file/img-'+promoterPicture});*/
+        const eventSchema = new Event({link,title,subtitle,data,hour,price,urls,status,location/*,promoter*/,picture:added==='byXml'?picture:'file/img-'+picture,color,category,tags,
+            addedDate:new Date(),locationRegex:locationRegex,type,artist});
         await eventSchema.save();
         await location.save();
-        await promoter.save();
-        res.status(200).json({eventSchema,location,promoter});
-/*        console.log("Sukces"+eventSchema)*/
+/*        await promoter.save({ "upsert": true });//?*/
+        res.status(200).json({eventSchema,location/*,promoter*/}); //promoter na razie nie, bo wszyscy sa tacy sami
     } catch (err) {
-        res.status(422).send({ error: err.message+"Pierwszy POST" });
+        res.status(422).send({ error: err.message+"Coś poszło nie tak" });
     }
 
-});
-router.get('/events',async(req,res)=>{
-    const events = await Event.find();
+}
+    else{
+        console.log("Jest już taki event")
+        if(events.length>1){
+            console.log("We have some duplicate")
+        }
+        const tickets = await Event.updateOne(
+            {urls:{$nin:[urls]},_id:events[0]._id},
+            {$push: {'urls':urls}});
+        console.log("Bilety",tickets,"URL",urls)
+        res.status(200).send(tickets);
+    }
 
+}
+);
+router.post('/titles',async(req,res)=> {
+        const titles = await Title.find({title: req.body.title})
+        if(titles.length === 0) {
+            try {
+/*
+                const location = new Location({name:req.body.event.locationName,street:req.body.event.locationStreet,
+                    postalCode:req.body.event.locationPostalCode, city:req.body.event.locationCity,picture:req.body.event.added==='byXml'?req.body.event.locationPicture:'file/img-'+req.body.event.locationPicture,
+                    SEOType:req.body.event.locationSEOType,longitude:req.body.event.locationLongitude,latitude:req.body.event.locationLatitude,
+                    locationRegex:req.body.event.locationRegex})
+                const promoter = new Promoter({name:req.body.promoterName,link:req.body.promoterLink,picture:req.body.added==='byXml'?req.body.promoterPicture:'file/img-'+req.body.promoterPicture});
+*/
+                const titlesSchema = new Title({title: req.body.title, event: req.body.event,addedDate:new Date()});
+                await titlesSchema.save();
+                res.status(200).send(titlesSchema);
+                console.log("Sukces")
+            }
+            catch (err) {
+                res.status(422).send({error: err.message + "Coś poszło nie tak"});
+            }
+        }
+        else {
+            if(titles.length>1){
+                console.log("We have some duplicate")
+            }
+            console.log("Już jest taki title   "+req.body.title)
+            const updateTitles = await Title.updateOne(
+                {event:{$nin:[req.body.event]},_id:titles[0]._id},
+                {$push:{'event':req.body.event}}
+            );
+            res.status(200).send(updateTitles)
+        }
+    }
+);
+router.get('/titles',async(req,res)=>{
+    const titles = await Title.find().sort({title:1});
+/*    await Title.find().sort({title:1});*/
+
+
+
+    //.limit(10)
+    res.send(titles);
+})
+router.get('/events',async(req,res)=>{
+    let events = await Event.find({'location.city':"Gdańsk"}).limit(10)
+    let events2 = await Event.find({'location.city':"Warszawa"}).limit(10)
+    let events3 = await Event.find({'location.city':"Kraków"}).limit(10)
+    let events4 = await Event.find({'location.city':"Poznań"}).limit(10)
+    let events5 = await Event.find({'location.city':"Katowice"}).limit(10)
+    let events6 = await Event.find({'location.city':"Szczecin"}).limit(10)
+    events.push(...events2)
+    events.push(...events3)
+    events.push(...events4)
+    events.push(...events5)
+    events.push(...events6)
+    events.sort((a,b)=>a.addedDate-b.addedDate)
     res.send(events);
 })
+router.get('/events/:title',async(req,res)=>{
+    const events = await Event.find({title:req.params.title});
+    console.log(events.length+"Ile")
+    res.send(events);
+})
+
 router.get('/locations',async(req,res)=>{
     const loc = await Location.find();
 
@@ -181,7 +259,6 @@ router.post('/updatePromotion', async (req, res) => {
     console.log(promotion)
     res.send(promotion);
 });
-
 const pathToIndex = path.join(__dirname, "/../../public/index/html")
 app.get("/", (req, res) => {
     const raw = fs.readFileSync(pathToIndex)
@@ -198,3 +275,17 @@ app.get("*", (req, res) =>
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 })
+
+
+
+/*      jakbym chcial tutaj dodawac eventy z id to sie przyda
+        const locationRegex = req.body.myJson.locationStreet.replace("ul.","").replace("ul","").replace("al.","").replace("al","").replace(/[0-9]/g, '').replace(" ","")
+            .toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "")
+        const location = new Location({name:req.body.myJson.locationName,street:req.body.myJson.locationStreet,postalCode:req.body.myJson.locationPostalCode,
+            city:req.body.myJson.locationCity,picture:req.body.myJson.added==='byXml'?req.body.myJson.locationPicture:'file/img-'+req.body.myJson.locationPicture,
+            SEOType:req.body.myJson.locationSEOType,longitude:req.body.myJson.locationLongitude,latitude:req.body.myJson.locationLatitude,locationRegex:locationRegex})
+        const promoter = new Promoter({name:req.body.myJson.promoterName,link:req.body.myJson.promoterLink,picture:req.body.myJson.added==='byXml'?req.body.myJson.promoterPicture:'file/img-'+req.body.myJson.promoterPicture});
+        const eventSchema = new Event({link:req.body.myJson.link,title:req.body.myJson.title,subtitle:req.body.myJson.subtitle,data:req.body.myJson.data,
+            hour:req.body.myJson.hour,price:req.body.myJson.price,urls:req.body.myJson.urls,status:req.body.myJson.status,location,promoter,picture:req.body.myJson.added==='byXml'?req.body.myJson.picture:'file/img-'+req.body.myJson.picture,
+            color:req.body.myJson.color, category:req.body.myJson.category,tags:req.body.myJson.tags, addedDate:new Date(),locationRegex});
+        await eventSchema.save();*/
