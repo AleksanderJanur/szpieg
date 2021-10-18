@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react'
-import {Button, Form, Header, Icon, Segment} from 'semantic-ui-react'
+import {Button, Form, Header, Icon, Input, Segment, Select,Dimmer, Loader, Image,} from 'semantic-ui-react'
 import trackerApi from "../api/tracker";
 import { useHistory } from 'react-router-dom';
 import {Context as TitleContext} from '../context/TitleContext';
@@ -9,10 +9,31 @@ const XMLImporter = () => {
     const history = useHistory();
     const [eventArr, setEventArr] = useState(new Set());
     const [locationArr, setLocationArr] = useState(new Set());
+    const [helpTimer, setHelpTimer] = useState("koniec");
+    const [helpInterval, setHelpInterval] = useState();
+    const [startLoading, setStartLoading] = useState('')
     const {state, fetchTitles} = useContext(TitleContext);
-    useEffect(() => {
-        fetchTitles();
-    }, [eventArr]);
+    const XMLOptions = [
+        { key: 'ewe', text: 'Ewejściowki', value: 'ewe' },
+        { key: 'bletomat', text: 'biletomat', value: 'bletomat' },
+        { key: 'biletin', text: 'biletin', value: 'biletin' },
+        { key: 'bilety24', text: 'bilety24', value: 'bilety24' },
+        { key: 'kupbilecik', text: 'kupbilecik', value: 'kupbilecik' }
+    ]
+
+
+    const test = (tmp)=> {
+        setHelpInterval(true)
+        console.log("mój stary,", helpTimer)
+        if (helpTimer === "koniec") {
+
+            setStartLoading("")
+        } else {
+            setStartLoading("timer")
+        }
+        setHelpTimer("koniec")
+    }
+
 
     const helpFun = ()=>{
         /*        for (let item of mySetJson){
@@ -78,12 +99,15 @@ const XMLImporter = () => {
     const addXml = async(arr) => {
         for (let myXml of arr) {
             //tutaj mam jeszcze location array, ale na razie nie jest mi on potrzebny(moze sie przydac)
+            setStartLoading('active')
             await trackerApi.post('/events',
                 {
                     "added": "byXml",
                     "link": myXml.url,
-                    "title": myXml.title,
+                    "title": myXml.title.replaceAll("&amp;",""),
+                    "subtitle": myXml.subtitle,
                     "data": myXml.data,
+                    "hour":myXml.hour,
                     "price": myXml.price,
                     "urls": myXml.urls,
                     "locationName": myXml.locationName,
@@ -103,6 +127,7 @@ const XMLImporter = () => {
                 }
             ).then(res => res.status === 200 ? console.log("Event-Sukces") : alert("Coś poszło nie tak"))
         }
+        setStartLoading('')
     }
     const addTitles = async(title, event)=>{
         await trackerApi.post('/titles',
@@ -122,6 +147,7 @@ const XMLImporter = () => {
             alert("Musisz wybrać xmla")
         }
         else {
+            setStartLoading('active')
             const file = xml
             const reader = new FileReader();
             reader.readAsText(file);
@@ -137,13 +163,16 @@ const XMLImporter = () => {
                     let eweLocationSet = new Set();
                     let checkArr5 =[];
                     for(let i =0; i < json.length;i++){
+                        setStartLoading('active')
                         if(!(json[i].genre==="Koncert"||json[i].genre==="Opera"||json[i].genre==="Muzyczny")){
                             continue;
                         }
                         helpJson={
                             "link":json[i].reservationForm,
-                            "title":json[i].title,
+                            "title":json[i].title.replaceAll("&amp;",""),
+                            "subtitle":json[i].production,
                             "data":json[i].date,
+                            "hour": new Date(json[i].date).toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit'}),
                             "price":json[i].price,
                             "locationName":json[i].venue.name,
                             "locationStreet": json[i].venue.name.address,
@@ -181,6 +210,7 @@ const XMLImporter = () => {
                     addXml(mySetJson)
                     /*                    setLocationArr(eweLocationSet);*/
                     for (let item of mySetJson){
+                        setHelpTimer("time")
                         if(!(eweMap.has(item.title))) {
                             eweMap.set(item.title, new Set())
                             eweMap.get(item.title).add(item)
@@ -193,6 +223,7 @@ const XMLImporter = () => {
                     console.log(eweMap)
 
                     for (const [key, value] of eweMap) {
+                        setHelpTimer("tomek")
                         let array = Array.from(value);
                         addTitles(key, array)
                     }
@@ -218,21 +249,23 @@ const XMLImporter = () => {
                                 let count11 = 0;
                                 let checkArr4 = [];
                                 for (let i = 0; i < res.length; i++) {
+                                    setStartLoading('active')
                                     if(res[i].main_genre[0]==="Konferencje"||res[i].main_genre[0]==="Dla dzieci"||res[i].main_genre[0]==="Stand-up"
                                         ||res[i].main_genre[0]===""||res[i].main_genre[0]==="None"||res[i].main_genre[0]==="Rekreacja"||res[i].main_genre[0]==="Imprezy"){
                                         continue;
                                     }
                                     myJson = {
                                         "link": res[i].tickets_url[0],
-                                        "title": res[i].name[0],
+                                        "title": res[i].name[0].replaceAll("&amp;",""),
+                                        "subtitle":"",
                                         "data": res[i].date_start[0],
-                                        "hour": res[i].time_start[0],
+                                        "hour": new Date(res[i].date_start[0]).toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit'}),
                                         "price": res[i].price[0],
                                         "locationName": res[i].place_name[0],
                                         "locationStreet": res[i].place_address[0],
                                         "locationPostalCode": "",
                                         "locationCity": res[i].place_city[0],
-                                        "picture": res[i].logo[0],
+                                        "picture": res[i].logo_400x400[0],
                                         "category": "",
                                         "description": res[i].description[0],
                                         "urls": [{"url": res[i].tickets_url[0], "name": "BILETOMATPL"}],
@@ -294,10 +327,13 @@ const XMLImporter = () => {
                                 let checkArr3 = [];
                                 let biletinLocationSet = new Set();
                                 for (let i = 0; i < res.length; i++){
+                                    setStartLoading('active')
                                     myJson = {
                                         "link": res[i].url,
-                                        "title": res[i].name[0],
+                                        "title": res[i].name[0].replaceAll("&amp;",""),
+                                        "subtitle":"",
                                         "data": res[i].dates[0].show_event_date[0],
+                                        "hour": new Date(res[i].dates[0].show_event_date[0]).toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit'}),
                                         "price": res[i].ticekts===undefined?0:res[i].tickets[0].price_max[0],
                                         "locationName": res[i].localization[0].name[0],
                                         "locationStreet": res[i].localization[0].street[0],
@@ -375,6 +411,7 @@ const XMLImporter = () => {
                                 let flag = true;
                                 console.log(res.filter(item=>item.type_name[0]==="Koncert"||item.type_name[0]==="Opera"))
                                 for (let i = 0; i < res.length; i++) {
+                                    setStartLoading('active')
                                     if(!(res[i].type_name[0]==="Koncert"||res[i].type_name[0]==="Opera")){
                                         continue
                                     }
@@ -397,8 +434,10 @@ const XMLImporter = () => {
                                     }
                                     myJson = {
                                         "link": res[i].urls[0].buy[0],
-                                        "title": res[i].title[0],
+                                        "title": res[i].title[0].replaceAll("&amp;",""),
+                                        "subtitle":"",
                                         "data": res[i].date[0],
+                                        "hour": new Date(res[i].date[0]).toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit'}),
                                         "price": res[i].pricevariants[0].pricevariants===undefined?null:res[i].pricevariants[0].pricevariant[0].name[0],
                                         "locationName": res[i].place[0].name[0],
                                         "locationStreet": res[i].place[0].street[0],
@@ -469,6 +508,7 @@ const XMLImporter = () => {
                                 let checkArr = [];
                                 let bilecikLocationSet = new Set();
                                 for (let i = 0; i < res.length; i++) {
+                                    setStartLoading('active')
                                     if(res[i].Category[0].Type[0]!=='muzyka'){
                                         continue
                                     }
@@ -486,9 +526,10 @@ const XMLImporter = () => {
                                                                         }*/
                                     myJson={
                                         "link": res[i].Link[0],
-                                        "title": res[i].Name[0],
+                                        "title": res[i].Name[0].replaceAll("&amp;",""),
                                         "subtitle":res[i].Category[0].SubCategory[0].Name[0],
                                         "data": res[i].Date[0],
+                                        "hour": new Date(res[i].Date[0]).toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit'}),
                                         "price":res[i].TicketsInfo[0].Price[0],
                                         "locationName": res[i].Object[0].Name[0],
                                         "locationStreet": res[i].Object[0].Address[0],
@@ -572,6 +613,7 @@ const XMLImporter = () => {
             }
 
         }
+
     }
     return(
         <Segment placeholder>
@@ -579,19 +621,28 @@ const XMLImporter = () => {
                 <Icon name='xml file outline'/>
                 Dodaj xmla ze swojego komputera
             </Header>
-            <Form.Group widths='equal'>
+            <Form.Group>
                 <Form.Field>
                     <input type="file" onChange={e=>setXml(e.target.files[0])}></input>
                 </Form.Field>
             </Form.Group>
             <Button type='submit' style={{marginTop:10}} onClick={()=>{getXML();}} primary>Dodaj xmla</Button>
-            <div onClick={()=>{getXML()}}>dupa</div>
+            {startLoading==='active'?
+                <Segment>
+                    <Dimmer active={startLoading}>
+                        <Loader>Trwa dodawanie postów</Loader>
+                    </Dimmer>
+
+                    <Image src='https://react.semantic-ui.com/images/wireframe/short-paragraph.png'/>
+                </Segment>:null
+            }
+{/*            <div onClick={()=>{getXML()}}>dupa</div>
             <div onClick={()=>helpFun()}>dupa2</div>
             { state.map((item,i)=>(
                 <div>{item.title}</div>
             ))
 
-        }
+        }*/}
         </Segment>
     )
 }

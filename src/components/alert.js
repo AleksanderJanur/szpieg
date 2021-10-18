@@ -13,7 +13,7 @@ const Alert = () =>{
     const history = useHistory();
     const funkcja = async(link,title,subtitle,data, hour, price, kupBilecik,BILETINPL,BILETY24PL,EVENTIMPL,BILETOMATPL,EWEJSCIOWKIPL,TICKETMASTER,
                           status, locationName,locationStreet,locationPostalCode,locationCity,locationPicture,locationSEOType,locationLongitude,locationLatitude,
-                          promoterName,promoterLink,promoterPicture, picture, promotion, color, category, tags) =>{
+                          promoterName,promoterLink,promoterPicture, picture, promotion, color, category, tags,description) =>{
         addToTicketArr();
         await trackerApi.post('/events', {
             "link": link,
@@ -39,7 +39,8 @@ const Alert = () =>{
             "promotion": promotion,
             "color": color,
             "category": category,
-            "tags": tags.split('#').filter(item=>item!=='')  //do sprawdzenia
+            "tags": tags.split('#').filter(item=>item!==''),
+            "description":description
         }).then(res=>res.status===200?notify():alert("Coś poszło nie tak"))
     }
     const notify = () => {
@@ -52,7 +53,7 @@ const Alert = () =>{
         arr.push(picture);
         arr.push(promoterPicture);
         arr.push(locationPicture)
-        console.log("dupa")
+
         for(let i=0;i<arr.length;i++) {
             if(arr[i]==='')
                 continue
@@ -228,6 +229,7 @@ const Alert = () =>{
     const [category, setCategory] = useState('');
     const [tags, setTags] = useState('');
     const [xml, setXml] = useState('')
+    const [description, setDescription] = useState('');
 
     return(
         /*<div onClick={funkcja}>dupa</div>*/
@@ -622,10 +624,18 @@ const Alert = () =>{
                 onChange={e=>setTags(e.target.value)}
                 value={tags}
             />
-            <div onClick={()=>sendTestPicture()}>dupa</div>
+            <Form.Field
+                id='form-textarea-description'
+                control={TextArea}
+                label='Opis'
+                placeholder='Opis'
+                onChange={e=>setDescription(e.target.value)}
+                value={tags}
+            />
+{/*            <div onClick={()=>sendTestPicture()}>dupa</div>*/}
             <Button type='submit' onClick={()=>{sendTestPicture();funkcja(link,title,subtitle,startDate, hour, price, kupBilecik,BILETINPL,BILETY24PL,EVENTIMPL,BILETOMATPL,EWEJSCIOWKIPL,TICKETMASTER,
                 status, locationName,locationStreet,locationPostalCode,locationCity,locationPicture,locationSEOType,locationLongitude,locationLatitude,
-                promoterName,promoterLink,promoterPicture, picture, promotion, color, category, tags)}}>Wyślij</Button>
+                promoterName,promoterLink,promoterPicture, picture, promotion, color, category, tags, description)}}>Wyślij</Button>
         </Form>
 
     )

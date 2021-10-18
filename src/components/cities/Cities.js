@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import 'semantic-ui-css/semantic.min.css'
 import { Container, Grid, Select } from 'semantic-ui-react'
 import '../newEvents/NewEventsStyle.css'
+import {Context as EventContext} from "../../context/EventContext";
 import {
   Link, useParams
 } from "react-router-dom";
@@ -33,6 +34,11 @@ const countryOptions = [
 
 const Cities = (props) => {
   const [city] = useState(["Kraków", "Warszawa", "Poznań", "Gdańsk","Szczecin", "Gdynia"]);
+    const { name } = useParams();
+    const {state} = useContext(EventContext);
+/*    useEffect(() => {
+        fetchEventsByCity(name)
+    },[name]);*/
   return(
     <div className="cities">
     <Container>
@@ -42,7 +48,7 @@ const Cities = (props) => {
               <span className="cityText firstElem">{props.header}</span>
               {
                 city.map((item,key)=>
-                <Link className="linksHref" to={`/${item.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "")}`}><span className="cityText singleElem"> - {item}</span></Link>
+                <a className="linksHref" href={`/${item.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "")}`}><span className="cityText singleElem"> - {item}</span></a>
                 )
               }
               </div>
@@ -54,6 +60,7 @@ const Cities = (props) => {
               null
               }
             </div>
+
         </Grid>
     </Container>
     </div>

@@ -24,9 +24,12 @@ import CityBackground from './components/cityBackground/cityBackground';
 import Dates from './components/dates/Dates';
 import Concert from './components/concert/Concert';
 import Places from './components/places/Places';
+import GetEvents from "./api/GetEvents";
+import GetEventsByTitle from "./api/GetEventsByTitle";
+import GetEventsByCity from "./api/GetEventsByCity";
 import reportWebVitals from './reportWebVitals';
 import o_szpieguImage from './components/img/czesc-jestem-szpiegiem.jpg'
-
+import {useParams} from "react-router";
 ReactDOM.render(
   <React.StrictMode>
       <EventProvider>
@@ -48,6 +51,7 @@ ReactDOM.render(
 
                       <Route exact path="/">
                           <Navbar />
+                          <GetEvents />
                           <Cities place="footer" header="Wybierz miasto:"/>
                           <NewEvents header="Najnowsze wydarzenia" columns={5} items={10} hr={false} hideLast={true} seeMore={false} />
                           <Recommended header="Polecane"/>
@@ -80,6 +84,7 @@ ReactDOM.render(
                       </Route>
                       <Route path="/koncert/:name">
                           <Navbar/>
+                          <GetEventsByTitle />
                           <Cities place="events" header="Wybierz miasto:"/>
                           <Concert link1="Strona główna - " link2="Koncert - "/>
                           <Footer />
@@ -105,6 +110,7 @@ ReactDOM.render(
 
                       <Route path="/:city">
                           <Navbar/>
+                          <GetEventsByCity />
                           <Cities place="events" header="Wybierz miasto:"/>
                           <CityBackground/>
                           <Recommended header="Wydarzenia polecane - " />
@@ -116,7 +122,8 @@ ReactDOM.render(
 
 
               </Router>
-                      </HashRouter>
+                  </HashRouter>
+
 {/*          <EditEvent/>
     <EditEvent />
       <img

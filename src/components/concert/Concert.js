@@ -7,7 +7,7 @@ import ConcertContent from './ConcertContent'
 import Sidebar from './Sidebar'
 
 
-const Cities = (props) => {
+const Concert = (props) => {
   let { name } = useParams();
   const [page, setPage] = useState("")
   console.log(props)
@@ -214,4 +214,4 @@ Franklina Roosevelta 22,<br>
   )
 }
 
-export default Cities
+export default Concert

@@ -83,6 +83,7 @@
 }
 .ticketsDiv{
   display: inline-block;
+  width:100% !important;
 }
 .tags{
   margin-right:10px;

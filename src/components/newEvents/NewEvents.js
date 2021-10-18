@@ -8,11 +8,11 @@ import {Context as EventContext} from "../../context/EventContext";
 
 
 const Events = (props) => {
-  const {state, fetchEvents} = useContext(EventContext);
+  const {state} = useContext(EventContext);
   console.log(props.header)
-  useEffect(() => {
+/*  useEffect(() => {
     fetchEvents()
-  }, []);
+  }, []);*/
   const [events] = useState(["Kraków", "Warszawa", "Poznań", "Gdańsk", "Gdynia", "Kraków", "Warszawa", "Poznań", "Gdańsk", "Gdynia"]);
   return(
       <div className="Cities">
@@ -35,7 +35,7 @@ const Events = (props) => {
           <Grid columns={props.columns} doubling className="eventsGrid">
             <Grid.Row className={props.hideLast ? "rowNewEvents" : "" } >
               {
-                state.filter(elem=>props.header===elem.location.city)
+                state.filter(elem=>props.header===elem.location.city||props.header==="Wszystkie wydarzenia")
                     .map((item,i)=> (
                         <Grid.Column>
                           <Link to={"/koncert/"+item.title}>
@@ -45,7 +45,7 @@ const Events = (props) => {
                                 <Card.Meta>
                                   <span className='date'>{new Date(item.data).toISOString().split('T')[0]}</span>
                                 </Card.Meta>
-                                <Card.Header>{item.location.city}</Card.Header>
+                                  <Card.Header>{ item.title.length > 20 ? item.title.substr(0, 20-1) + '..' : item.title}</Card.Header>
 
                               </Card.Content>
                             </Card>
@@ -64,7 +64,7 @@ const Events = (props) => {
                                 <Card.Meta>
                                   <span className='date'>{new Date(item.data).toISOString().split('T')[0]}</span>
                                 </Card.Meta>
-                                <Card.Header>{item.location.city}</Card.Header>
+                                  <Card.Header>{ item.title.length > 20 ? item.title.substr(0, 20-1) + '..' : item.title}</Card.Header>
 
                               </Card.Content>
                             </Card>

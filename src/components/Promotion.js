@@ -25,6 +25,7 @@ const Promotion = ()=> {
     const {state, fetchEvents} = useContext(BlogContext);
     const [searchQuery, setSearchQuery] = React.useState('');
     let arr = [];
+    const space = "\n"
     const [theArray, setTheArray] = useState([]);
     const cityOptions = [
         { key: 'KR', text: 'Kraków', value: 'Krakow' },
@@ -135,17 +136,17 @@ const Promotion = ()=> {
                             active={activeItem === 'updates'}
   /*                          onClick={()=>handleClick(item)}*/
                         >
-                            <div>Link : <span style={{color:"blue",fontWeight: "bold"}}>{item.link}</span> Tytuł : <span style={{color:"blue",fontWeight: "bold"}}>{item.title}</span>
-                                Podtytuł : <span style={{color:"blue",fontWeight: "bold"}}>{item.subtitle}</span> Data : <span style={{color:"blue",fontWeight: "bold"}}>{new Date(item.data).toISOString().split('T')[0]}</span>
-                                Godzina : <span style={{color:"blue",fontWeight: "bold"}}>{new Date(item.hour).toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit'})}</span>
-                                Cena :  <span style={{color:"blue",fontWeight: "bold"}}>{item.price}</span> Status : <span style={{color:"blue",fontWeight: "bold"}}>{item.status}</span> Nazwa Lokalizacji : <span style={{color:"blue",fontWeight: "bold"}}>{item.location.locationName}</span>
-                                Ulica Lokalizacji : <span style={{color:"blue",fontWeight: "bold"}}>{item.location.locationStreet}</span> Kod pocztowy Lokalizacji : <span style={{color:"blue",fontWeight: "bold"}}>{item.location.locationPostalCode}</span>
-                                Miasto Lokalizacji :<span style={{color:"blue",fontWeight: "bold"}}>{item.location.locationCity}</span> Zdjecie lokalizacji : <span style={{color:"blue",fontWeight: "bold"}}>{item.location.locationPicture}</span>
-                                SEOType Lokalizacji : <span style={{color:"blue",fontWeight: "bold"}}>{item.location.locationSEOType}</span>  Długość geograficzna : <span style={{color:"blue",fontWeight: "bold"}}>{item.location.locationLongitude}</span>
-                                Szerokość geograficzna : <span style={{color:"blue",fontWeight: "bold"}}>{item.location.locationLatitude}</span> Nazwa organiztora : <span style={{color:"blue",fontWeight: "bold"}}>{item.promoter.promoterName}</span>
-                                Link organizatora :<span style={{color:"blue",fontWeight: "bold"}}>{item.promoter.promoterLink}</span> Zdjecie organizatora :  <span style={{color:"blue",fontWeight: "bold"}}>{item.promoter.promoterPicture}</span>
-                                Zdjecie ogolne : <span style={{color:"blue",fontWeight: "bold"}}>{item.picture}</span> Kolor : <span>{item.color}</span>  Kategoria : <span style={{color:"blue",fontWeight: "bold"}}>{item.category}</span></div>
+                            <div>Link : <span style={{color:"blue",fontWeight: "bold"}}>{item.link}</span></div><div>{space}Tytuł : <span style={{color:"blue",fontWeight: "bold"}}>{item.title}</span></div><div>
+                                Podtytuł : <span style={{color:"blue",fontWeight: "bold"}}>{item.subtitle}</span></div><div>Data : <span style={{color:"blue",fontWeight: "bold"}}>{new Date(item.data).toISOString().split('T')[0]}</span></div><div>
+                                Godzina : <span style={{color:"blue",fontWeight: "bold"}}>{new Date(item.hour).toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit'})}</span></div><div>
+                                Cena :  <span style={{color:"blue",fontWeight: "bold"}}>{item.price}</span></div><div> Status : <span style={{color:"blue",fontWeight: "bold"}}>{item.status}</span></div><div> Nazwa Lokalizacji : <span style={{color:"blue",fontWeight: "bold"}}>{item.location.name}</span></div><div>
+                                Ulica Lokalizacji : <span style={{color:"blue",fontWeight: "bold"}}>{item.location.street}</span></div><div> Kod pocztowy Lokalizacji : <span style={{color:"blue",fontWeight: "bold"}}>{item.location.postalCode}</span></div><div>
+                                Miasto Lokalizacji :<span style={{color:"blue",fontWeight: "bold"}}>{item.location.city}</span></div><div> Zdjecie lokalizacji : <span style={{color:"blue",fontWeight: "bold"}}>{item.location.picture}</span></div><div>
+                                SEOType Lokalizacji : <span style={{color:"blue",fontWeight: "bold"}}>{item.location.SEOType}</span></div><div>  Długość geograficzna : <span style={{color:"blue",fontWeight: "bold"}}>{item.location.longitude}</span></div><div>
+                                Szerokość geograficzna : <span style={{color:"blue",fontWeight: "bold"}}>{item.location.latitude}</span></div><div>
+                                Zdjecie ogolne : <span style={{color:"blue",fontWeight: "bold"}}>{item.picture}</span></div><div> Kolor : <span>{item.color}</span></div><div>  Kategoria : <span style={{color:"blue",fontWeight: "bold"}}>{item.category}</span></div>
                             <Form.Group grouped>
+                                <br></br>
                                 <label>Gdzie promować</label>
                                 <Form.Field onClick={() => {
                                     if (theArray.some(code => code.event._id === item._id&&code.promotionType==='Strona Główna')){

@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react';
 import Carousel from "react-multi-carousel";
 import 'semantic-ui-css/semantic.min.css'
 import { Container, Card,  Image } from 'semantic-ui-react'
 import "react-multi-carousel/lib/styles.css";
 import './RecommendedStyle.css'
-import {  useParams } from "react-router-dom";
+import {  useParams, Link } from "react-router-dom";
 import image from '../img/koncert1.jpg'
+import {Context as EventContext} from "../../context/EventContext";
 const responsive = {
   superLargeDesktop: {
     // the naming can be any, depends on you.
@@ -28,6 +29,7 @@ const responsive = {
 const Events = (props) => {
   const [events] = useState(["Kraków", "Warszawa", "Poznań", "Gdańsk", "Gdynia", "Kraków", "Warszawa", "Poznań", "Gdańsk", "Gdynia"]);
   let { city } = useParams();
+  const {state} = useContext(EventContext);
   {city ? city=city : city=""}
   return(
     <div className="Recommended">
@@ -37,24 +39,29 @@ const Events = (props) => {
     </div>
     <Carousel centerMode={true} responsive={responsive}>
     {
-      events.map((item,key)=>
+      state.slice(0,10)
+          .map((item,i) => (
       <div className="marginright15">
-      <a href="/#">
+      <Link to={"/koncert/"+item.title}>
         <Card className="RecommendedCards">
-        <Image size="tiny" bordered className="recommendedImage" src={image} wrapped ui={false} />
+        <Image size="tiny" bordered className="recommendedImage" src={item.picture} wrapped ui={false} />
         <Card.Content>
-        <Card.Meta>
-        </Card.Meta>
-          <Card.Header>{item}</Card.Header>
+          <Card.Meta>
+            <span className='date'>{new Date(item.data).toISOString().split('T')[0]}</span>
+          </Card.Meta>
+
+          <Card.Header>{ item.title.length > 30 ? item.title.substr(0, 30-1) + '..' : item.title}</Card.Header>
 
         </Card.Content>
           </Card>
-          </a>
+          </Link>
       </div>
       )
+          )
     }
     </Carousel>
     </Container>
+      {console.log(state,"lfdsafda")}
     </div>
   )
 }

@@ -107,12 +107,12 @@ const EditEvent2 = (props)=>{
         return ticketArr;
     }
     //to powinny undefined leciec jako nulle ---
-    const [link, setLink] = useState(props.location.state.event.link);
-    const [title, setTitle] = useState(props.location.state.event.title);
-    const [subtitle, setSubtitle] = useState(props.location.state.event.subtitle);
-    const [startDate, setStartDate] = useState(new Date(props.location.state.event.data));
-    const [hour, setHour] = useState(props.location.state.event.hour.isValid?new Date(props.location.state.event.hour):new Date());
-    const [price, setPrice] = useState(props.location.state.event.price)
+    const [link, setLink] = useState(props.location.state===undefined?'':props.location.state.event.link);
+    const [title, setTitle] = useState(props.location.state===undefined?'':props.location.state.event.title);
+    const [subtitle, setSubtitle] = useState(props.location.state===undefined?'':props.location.state.event.subtitle);
+    const [startDate, setStartDate] = useState(props.location.state===undefined?new(Date):new Date(props.location.state.event.data));
+    const [hour, setHour] = useState(props.location.state===undefined?new Date():props.location.state.event.hour.isValid?new Date(props.location.state.event.hour):new Date());
+    const [price, setPrice] = useState(props.location.state===undefined?'':props.location.state.event.price)
     const [kupBilecik, setKupBilecik] = useState({clicked:'off',url:''});//Tutaj jeszcze dodac, ze to jest kupBilecik
     const [BILETINPL, setBILETINPL] = useState({clicked:'off',url:''});
     const [BILETY24PL, setBILETY24PL] = useState({clicked:'off',url:''});
@@ -120,53 +120,55 @@ const EditEvent2 = (props)=>{
     const [BILETOMATPL, setBILETOMATPL] = useState({clicked:'off',url:''});
     const [EWEJSCIOWKIPL, setEWEJSCIOWKIPL] = useState({clicked:'off',url:''});
     const [TICKETMASTER, setTICKETMASTER] = useState({clicked:'off',url:''});
-    const [status, setStatus] = useState(props.location.state.event.status);
-    const [locationName, setLocationName] = useState(props.location.state.event.location.locationName);
-    const [locationStreet, setLocationStreet] = useState(props.location.state.event.location.locationStreet);
-    const [locationPostalCode, setLocationPostalCode] = useState(props.location.state.event.location.locationPostalCode);
-    const [locationCity, setLocationCity] = useState(props.location.state.event.location.locationCity);
-    const [locationPicture, setLocationPicture] = useState(props.location.state.event.location.locationPicture===undefined?null:props.location.state.event.location.locationPicture);
-    const [locationSEOType, setLocationSEOType] = useState(props.location.state.event.location.locationSEOType);
-    const [locationLongitude, setLocationLongitude] = useState(props.location.state.event.location.locationLongitude);
-    const [locationLatitude, setLocationLatitude] = useState(props.location.state.event.location.locationLatitude);
-    const [promoterName, setPromoterName] = useState(props.location.state.event.promoter.name);
-    const [promoterLink, setPromoterLink] = useState(props.location.state.event.promoter.link);
-    const [promoterPicture, setPromoterPicture] = useState(props.location.state.event.promoter.picture===undefined?null:props.location.state.event.promoter.promoterPicture);
-    const [picture, setPicture] = useState(props.location.state.event.picture===undefined?null:props.location.state.event.picture);
-    const [promotion, setPromotion] = useState(props.location.state.event.promotion);// co tu sie stalo?
-    const [color, setColor] = useState(props.location.state.event.color);
+    const [status, setStatus] = useState(props.location.state===undefined?'':props.location.state.event.status);
+    const [locationName, setLocationName] = useState(props.location.state===undefined?'':props.location.state.event.location.locationName);
+    const [locationStreet, setLocationStreet] = useState(props.location.state===undefined?'':props.location.state.event.location.locationStreet);
+    const [locationPostalCode, setLocationPostalCode] = useState(props.location.state===undefined?'':props.location.state.event.location.locationPostalCode);
+    const [locationCity, setLocationCity] = useState(props.location.state===undefined?'':props.location.state.event.location.locationCity);
+    const [locationPicture, setLocationPicture] = useState(props.location.state===undefined?'':props.location.state.event.location.locationPicture===undefined?null:props.location.state.event.location.locationPicture);
+    const [locationSEOType, setLocationSEOType] = useState(props.location.state===undefined?'':props.location.state.event.location.locationSEOType);
+    const [locationLongitude, setLocationLongitude] = useState(props.location.state===undefined?'':props.location.state.event.location.locationLongitude);
+    const [locationLatitude, setLocationLatitude] = useState(props.location.state===undefined?'':props.location.state.event.location.locationLatitude);
+    const [promoterName, setPromoterName] = useState(props.location.state===undefined||props.location.state.event.promoter===undefined?'':props.location.state.event.promoter.name);
+    const [promoterLink, setPromoterLink] = useState(props.location.state===undefined||props.location.state.event.promoter===undefined?'':props.location.state.event.promoter.link);
+    const [promoterPicture, setPromoterPicture] = useState(props.location.state===undefined||props.location.state.event.promoter===undefined?'':props.location.state.event.promoter.picture===undefined?null:props.location.state.event.promoter.promoterPicture);
+    const [picture, setPicture] = useState(props.location.state===undefined?null:props.location.state.event.picture);
+    const [promotion, setPromotion] = useState(props.location.state===undefined?'':props.location.state.event.promotion);// co tu sie stalo?
+    const [color, setColor] = useState(props.location.state===undefined?'':props.location.state.event.color);
     const [category, setCategory] = useState(''); //?
     const [tags, setTags] = useState('');
     const [check, setCheck]= useState(false);
     useEffect(() => {
         let word = ''
-        for(let i=0;i<props.location.state.event.tags.length;i++){
-            word+='#'+props.location.state.event.tags[i]
-        }
-        setTags(word)
-        for(let j=0;j<props.location.state.event.urls.length;j++){
-            console.log(props.location.state.event.urls[j].name)
-            if(props.location.state.event.urls[j].name==='kupBilecik'){
-                setKupBilecik({clicked: 'on',url:props.location.state.event.urls[j].url})
-                setCheck(true)
+        if(props.location.state!==undefined) {
+            for (let i = 0; i < props.location.state.event.tags.length; i++) {
+                word += '#' + props.location.state.event.tags[i]
             }
-            if(props.location.state.event.urls[j].name==='BILETINPL'){
-                setBILETINPL({clicked: 'on',url:props.location.state.event.urls[j].url})
-            }
-            if(props.location.state.event.urls[j].name==='BILETY24PL'){
-                setBILETY24PL({clicked: 'on',url:props.location.state.event.urls[j].url})
-            }
-            if(props.location.state.event.urls[j].name==='EVENTIMPL'){
-                setEVENTIMPL({clicked: 'on',url:props.location.state.event.urls[j].url})
-            }
-            if(props.location.state.event.urls[j].name==='BILETOMATPL'){
-                setBILETOMATPL({clicked: 'on',url:props.location.state.event.urls[j].url})
-            }
-            if(props.location.state.event.urls[j].name==='EWEJSCIOWKIPL'){
-                setEWEJSCIOWKIPL({clicked: 'on',url:props.location.state.event.urls[j].url})
-            }
-            if(props.location.state.event.urls[j].name==='TICKETMASTER'){
-                setTICKETMASTER({clicked: 'on',url:props.location.state.event.urls[j].url})
+            setTags(word)
+            for (let j = 0; j < props.location.state.event.urls.length; j++) {
+                console.log(props.location.state.event.urls[j].name)
+                if (props.location.state.event.urls[j].name === 'kupBilecik') {
+                    setKupBilecik({clicked: 'on', url: props.location.state.event.urls[j].url})
+                    setCheck(true)
+                }
+                if (props.location.state.event.urls[j].name === 'BILETINPL') {
+                    setBILETINPL({clicked: 'on', url: props.location.state.event.urls[j].url})
+                }
+                if (props.location.state.event.urls[j].name === 'BILETY24PL') {
+                    setBILETY24PL({clicked: 'on', url: props.location.state.event.urls[j].url})
+                }
+                if (props.location.state.event.urls[j].name === 'EVENTIMPL') {
+                    setEVENTIMPL({clicked: 'on', url: props.location.state.event.urls[j].url})
+                }
+                if (props.location.state.event.urls[j].name === 'BILETOMATPL') {
+                    setBILETOMATPL({clicked: 'on', url: props.location.state.event.urls[j].url})
+                }
+                if (props.location.state.event.urls[j].name === 'EWEJSCIOWKIPL') {
+                    setEWEJSCIOWKIPL({clicked: 'on', url: props.location.state.event.urls[j].url})
+                }
+                if (props.location.state.event.urls[j].name === 'TICKETMASTER') {
+                    setTICKETMASTER({clicked: 'on', url: props.location.state.event.urls[j].url})
+                }
             }
         }
     }, []);
@@ -228,7 +230,7 @@ const EditEvent2 = (props)=>{
                     value={price}
                 />
                 <Form.Field>
-                    <label>Zdjęcie wyrózniające {props.location.state.event.picture}</label>
+                    <label>Zdjęcie wyrózniające {props.location.state===undefined?'':props.location.state.event.picture}</label>
                     <input type="file" onChange={e=>setPicture(e.target.files[0])}></input>
                 </Form.Field>
             </Form.Group>
@@ -575,7 +577,7 @@ const EditEvent2 = (props)=>{
                     value={locationCity}
                 />
                 <Form.Field>
-                    <label>Zdjęcie lokalizacji {props.location.state.event.location.picture}</label>
+                    <label>Zdjęcie lokalizacji {props.location.state===undefined?'':props.location.state.event.location.picture}</label>
                     <input type="file" onChange={e=>setLocationPicture(e.target.files[0])}></input>
                 </Form.Field>
             </Form.Group>
@@ -626,7 +628,7 @@ const EditEvent2 = (props)=>{
                     value={promoterLink}
                 />
                 <Form.Field>
-                    <label>Zdjęcie organizatora {props.location.state.event.promoter.picture}</label>
+                    <label>Zdjęcie organizatora {props.location.state===undefined||props.location.state.event.promoter===undefined?'':props.location.state.event.promoter.picture}</label>
                     <input type="file" onChange={e=>setPromoterPicture(e.target.files[0])}></input>
                 </Form.Field>
 

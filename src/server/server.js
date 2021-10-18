@@ -80,7 +80,7 @@ app.delete("/file/:filename", async (req, res) => {
 router.post('/events',async(req,res)=>{
     const {added,link,title,subtitle,data, hour, price,urls,
         status, locationName,locationStreet,locationPostalCode,locationCity,
-        locationPicture,locationSEOType,locationLongitude,locationLatitude,
+        locationPicture,locationSEOType,locationLongitude,locationLatitude,description,
         promoterName,promoterLink,promoterPicture, picture, color, category, tags,locationRegex,type,artist} = req.body;
 /*    const streetRegex1 = locationStreet.replace("ul.","").replace("ul","").replace("al.","").replace("al","").replace(/[0-9]/g, '').replace(" ","")
         .toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "")*/
@@ -93,7 +93,7 @@ router.post('/events',async(req,res)=>{
             city:locationCity,picture:added==='byXml'?locationPicture:'file/img-'+locationPicture,
             SEOType:locationSEOType,longitude:locationLongitude,latitude:locationLatitude,locationRegex:locationRegex})
 /*        const promoter = new Promoter({name:promoterName,link:promoterLink,picture:added==='byXml'?promoterPicture:'file/img-'+promoterPicture});*/
-        const eventSchema = new Event({link,title,subtitle,data,hour,price,urls,status,location/*,promoter*/,picture:added==='byXml'?picture:'file/img-'+picture,color,category,tags,
+        const eventSchema = new Event({link,title,subtitle,data,hour,price,urls,description,status,location/*,promoter*/,picture:added==='byXml'?picture:'file/img-'+picture,color,category,tags,
             addedDate:new Date(),locationRegex:locationRegex,type,artist});
         await eventSchema.save();
         await location.save();
@@ -152,7 +152,7 @@ router.post('/titles',async(req,res)=> {
     }
 );
 router.get('/titles',async(req,res)=>{
-    const titles = await Title.find().sort({title:1});
+    const titles = await Title.aggregate([{$match:{'event.picture':{$ne:""}}}, {$sample: { size: 10 } }])
 /*    await Title.find().sort({title:1});*/
 
 
@@ -161,23 +161,43 @@ router.get('/titles',async(req,res)=>{
     res.send(titles);
 })
 router.get('/events',async(req,res)=>{
-    let events = await Event.find({'location.city':"Gdańsk"}).limit(10)
-    let events2 = await Event.find({'location.city':"Warszawa"}).limit(10)
-    let events3 = await Event.find({'location.city':"Kraków"}).limit(10)
-    let events4 = await Event.find({'location.city':"Poznań"}).limit(10)
-    let events5 = await Event.find({'location.city':"Katowice"}).limit(10)
-    let events6 = await Event.find({'location.city':"Szczecin"}).limit(10)
+    let events = await Event.find({'location.city':"Gdańsk"}).sort({addedDate:-1}).limit(10)
+    let events2 = await Event.find({'location.city':"Warszawa"}).sort({addedDate:-1}).limit(10)
+    let events3 = await Event.find({'location.city':"Kraków"}).sort({addedDate:-1}).limit(10)
+    let events4 = await Event.find({'location.city':"Poznań"}).sort({addedDate:-1}).limit(10)
+    let events5 = await Event.find({'location.city':"Katowice"}).sort({addedDate:-1}).limit(10)
+    let events6 = await Event.find({'location.city':"Szczecin"}).sort({addedDate:-1}).limit(10)
     events.push(...events2)
     events.push(...events3)
     events.push(...events4)
     events.push(...events5)
     events.push(...events6)
     events.sort((a,b)=>a.addedDate-b.addedDate)
+    console.log("Ogolny /events")
+    //To jest do strony głownej trzeba bedzie jakos ogarnac te gety
+    /*const events = await Event.find({})*/
+
     res.send(events);
 })
-router.get('/events/:title',async(req,res)=>{
-    const events = await Event.find({title:req.params.title});
-    console.log(events.length+"Ile")
+router.get('/events/city/:city',async(req,res)=>{
+    function diacriticSensitiveRegex(string = '') {
+        return string.replace(/a/g, '[a,ą]')
+            .replace(/e/g, '[e,ę]')
+            .replace(/n/g, '[n,ń]')
+            .replace(/o/g, '[o,ó]')
+            .replace(/c/g, '[c,ć]')
+            .replace(/z/g, '[z,ż,ź]')
+            .replace(/s/g, '[s,ś]')
+            .replace(/l/g, '[l,ł]')
+    }
+    const events = await Event.find({'location.city': {$regex: diacriticSensitiveRegex(req.params.city), $options: 'i'}}).limit(50).sort({addedDate:-1})
+    console.log("city",req.params.city)
+    res.send(events);
+})
+
+router.get('/events/title/:title',async(req,res)=>{
+    const events = await Event.find({title:req.params.title}).sort({addedDate:-1});
+    console.log(req.params.title)
     res.send(events);
 })
 
